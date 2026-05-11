@@ -147,15 +147,16 @@ bool CStrategy::CheckMarketConditions()
    long spread = SymbolInfoInteger(m_symbol, SYMBOL_SPREAD);
    if(spread > m_maxSpreadPoints)
    {
-      // m_logger.Debug("Spread too high: " + IntegerToString(spread));
+      m_logger.Info(StringFormat("Spread too high: %d (max: %d)", spread, m_maxSpreadPoints));
       return false;
    }
-   
+
    // Session filter
    MqlDateTime dt;
    TimeToStruct(TimeCurrent(), dt);
    if(dt.hour < m_startHour || dt.hour >= m_endHour)
    {
+      m_logger.Info(StringFormat("Outside session: broker hour=%d (session: %d-%d)", dt.hour, m_startHour, m_endHour));
       return false;
    }
    
