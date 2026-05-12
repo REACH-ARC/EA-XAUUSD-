@@ -76,7 +76,9 @@ double CRiskManager::CalculateLotSize(double sl_distance_points)
    double tickValue = SymbolInfoDouble(m_symbol, SYMBOL_TRADE_TICK_VALUE);
    
    // Formula: Lot = RiskAmount / (SL_Points * TickValue / TickSize)
-   double lot = riskAmount / (sl_distance_points * tickValue);
+   double divisor = sl_distance_points * tickValue;
+   if(divisor <= 0) return 0.01;
+   double lot = riskAmount / divisor;
    
    // Clamp to min/max/step allowed by broker
    double minLot = SymbolInfoDouble(m_symbol, SYMBOL_VOLUME_MIN);
